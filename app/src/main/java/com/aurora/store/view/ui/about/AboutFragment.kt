@@ -69,21 +69,21 @@ class AboutFragment : BaseFragment<FragmentAboutBinding>() {
 
         val linkIcons = intArrayOf(
             R.drawable.ic_menu_about,
-            R.drawable.ic_help,
-            R.drawable.ic_xda,
-            R.drawable.ic_telegram,
-            R.drawable.ic_gitlab,
-            R.drawable.ic_fdroid,
-            R.drawable.ic_bitcoin_btc,
-            R.drawable.ic_bitcoin_bch,
-            R.drawable.ic_ethereum_eth,
-            R.drawable.ic_bhim,
-            R.drawable.ic_paypal,
-            R.drawable.ic_libera_pay,
+//            R.drawable.ic_help,
+//            R.drawable.ic_xda,
+//            R.drawable.ic_telegram,
+//            R.drawable.ic_gitlab,
+//            R.drawable.ic_fdroid,
+//            R.drawable.ic_bitcoin_btc,
+//            R.drawable.ic_bitcoin_bch,
+//            R.drawable.ic_ethereum_eth,
+//            R.drawable.ic_bhim,
+//            R.drawable.ic_paypal,
+//            R.drawable.ic_libera_pay,
         )
 
         binding.epoxyRecycler.withModels {
-            for (i in linkURLS.indices) {
+            for (i in linkIcons.indices) {
                 val link = Link(
                     id = i,
                     title = linkTitles[i],

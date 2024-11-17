@@ -427,12 +427,12 @@ class AppDetailsFragment : BaseFragment<FragmentDetailsBinding>() {
                         AppInstaller.uninstall(requireContext(), app.packageName)
                     }
 
-                    R.id.menu_download_manual -> {
-                        findNavController().navigate(
-                            AppDetailsFragmentDirections
-                                .actionAppDetailsFragmentToManualDownloadSheet(app)
-                        )
-                    }
+//                    R.id.menu_download_manual -> {
+//                        findNavController().navigate(
+//                            AppDetailsFragmentDirections
+//                                .actionAppDetailsFragmentToManualDownloadSheet(app)
+//                        )
+//                    }
 
                     R.id.menu_app_settings -> {
                         val intent = Intent().apply {
@@ -479,12 +479,12 @@ class AppDetailsFragment : BaseFragment<FragmentDetailsBinding>() {
 
             txtLine1.text = app.displayName
             txtLine2.text = app.developerName
-            txtLine2.setOnClickListener {
-                findNavController().navigate(
-                    AppDetailsFragmentDirections
-                        .actionAppDetailsFragmentToDevAppsFragment(app.developerName)
-                )
-            }
+//            txtLine2.setOnClickListener {
+//                findNavController().navigate(
+//                    AppDetailsFragmentDirections
+//                        .actionAppDetailsFragmentToDevAppsFragment(app.developerName)
+//                )
+//            }
             txtLine3.text = ("${app.versionName} (${app.versionCode})")
             packageName.text = app.packageName
 
@@ -651,34 +651,37 @@ class AppDetailsFragment : BaseFragment<FragmentDetailsBinding>() {
                     } else {
                         btn.setText(app.price)
                     }
+                    btn.isEnabled = false
+                    btn.visibility = View.GONE
+                    btn.setText(R.string.action_install)
 
-                    btn.addOnClickListener {
-                        if (!permissionProvider.isGranted(PermissionType.INSTALL_UNKNOWN_APPS)) {
-                            permissionProvider.request(PermissionType.INSTALL_UNKNOWN_APPS) {
-                                if (it) {
-                                    btn.setText(R.string.download_metadata)
-                                    startDownload()
-                                }
-                            }
-                        } else if (authProvider.isAnonymous && !app.isFree) {
-                            toast(R.string.toast_purchase_blocked)
-                        } else if (app.versionCode == 0) {
-                            toast(R.string.toast_app_unavailable)
-                        } else {
-                            if (app.fileList.requiresObbDir() && permissionProvider.isGranted(
-                                    PermissionType.STORAGE_MANAGER)) {
-                                permissionProvider.request(PermissionType.STORAGE_MANAGER) {
-                                    if (it) {
-                                        btn.setText(R.string.download_metadata)
-                                        startDownload()
-                                    }
-                                }
-                            } else {
-                                btn.setText(R.string.download_metadata)
-                                startDownload()
-                            }
-                        }
-                    }
+//                    btn.addOnClickListener {
+//                        if (!permissionProvider.isGranted(PermissionType.INSTALL_UNKNOWN_APPS)) {
+//                            permissionProvider.request(PermissionType.INSTALL_UNKNOWN_APPS) {
+//                                if (it) {
+//                                    btn.setText(R.string.download_metadata)
+//                                    startDownload()
+//                                }
+//                            }
+//                        } else if (authProvider.isAnonymous && !app.isFree) {
+//                            toast(R.string.toast_purchase_blocked)
+//                        } else if (app.versionCode == 0) {
+//                            toast(R.string.toast_app_unavailable)
+//                        } else {
+//                            if (app.fileList.requiresObbDir() && permissionProvider.isGranted(
+//                                    PermissionType.STORAGE_MANAGER)) {
+//                                permissionProvider.request(PermissionType.STORAGE_MANAGER) {
+//                                    if (it) {
+//                                        btn.setText(R.string.download_metadata)
+//                                        startDownload()
+//                                    }
+//                                }
+//                            } else {
+//                                btn.setText(R.string.download_metadata)
+//                                startDownload()
+//                            }
+//                        }
+//                    }
 
                     if (uninstallActionEnabled) {
                         binding.layoutDetailsToolbar.toolbar.invalidateMenu()

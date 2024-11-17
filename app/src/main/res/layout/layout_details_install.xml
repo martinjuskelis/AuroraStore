@@ -49,7 +49,8 @@
             android:layout_marginBottom="@dimen/margin_xsmall"
             android:text="@string/action_install"
             app:btnActionText="@string/action_install"
-            app:btnActionTextColor="?colorOnPrimary" />
+            app:btnActionTextColor="?colorOnPrimary"
+            app:enabled="false" />
 
         <RelativeLayout
             android:id="@+id/progress_layout"

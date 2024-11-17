@@ -45,7 +45,8 @@
                 android:textAllCaps="true"
                 android:textAppearance="@style/TextAppearance.Aurora.SubTitle"
                 app:iconPadding="@dimen/padding_large"
-                tools:text="Install" />
+                tools:text="Install"
+                app:enabled="false" />
         </RelativeLayout>
 
         <RelativeLayout
