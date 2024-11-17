@@ -36,7 +36,8 @@
         app:iconSpaceReserved="false"
         app:key="PREFERENCE_DEFAULT_SELECTED_TAB"
         app:title="@string/pref_ui_layout_tab"
-        app:useSimpleSummaryProvider="true" />
+        app:useSimpleSummaryProvider="true"
+        app:enabled="false"/>
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
@@ -44,16 +45,18 @@
         app:title="@string/pref_common_extra" />
 
     <SwitchPreferenceCompat
-        app:defaultValue="true"
+        app:defaultValue="false"
         app:iconSpaceReserved="false"
         app:key="PREFERENCE_FOR_YOU"
         app:summary="@string/pref_ui_no_for_you_desc"
-        app:title="@string/pref_ui_no_for_you" />
+        app:title="@string/pref_ui_no_for_you"
+        app:enabled="false"/>
 
     <SwitchPreferenceCompat
         app:defaultValue="false"
         app:iconSpaceReserved="false"
         app:key="PREFERENCE_SIMILAR"
         app:summary="@string/pref_ui_similar_apps_desc"
-        app:title="@string/pref_ui_similar_apps" />
+        app:title="@string/pref_ui_similar_apps"
+        app:enabled="false"/>
 </androidx.preference.PreferenceScreen>

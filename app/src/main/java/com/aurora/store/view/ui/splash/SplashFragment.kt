@@ -202,9 +202,9 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
                     SplashFragmentDirections.actionSplashFragmentToUpdatesFragment()
                 }
 
-                1 -> SplashFragmentDirections.actionSplashFragmentToGamesContainerFragment()
+                1 -> SplashFragmentDirections.actionSplashFragmentToUpdatesFragment()
                 2 -> SplashFragmentDirections.actionSplashFragmentToUpdatesFragment()
-                else -> SplashFragmentDirections.actionSplashFragmentToNavigationApps()
+                else -> SplashFragmentDirections.actionSplashFragmentToUpdatesFragment()
             }
         activity?.viewModelStore?.clear() // Clear ViewModelStore to avoid bugs with logout
         findNavController().navigate(directions)

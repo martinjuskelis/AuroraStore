@@ -54,29 +54,29 @@ class SearchSuggestionFragment : BaseFragment<FragmentSearchSuggestionBinding>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Toolbar
-        binding.layoutToolbarSearch.apply {
-            searchView = inputSearch
-            imgActionPrimary.setOnClickListener {
-                searchView.hideKeyboard()
-                findNavController().navigateUp()
-            }
-            imgActionSecondary.setOnClickListener {
-                findNavController().navigate(R.id.downloadFragment)
-            }
-            clearButton.apply {
-                visibility = if (query.isBlank()) View.GONE else View.VISIBLE
-                setOnClickListener { searchView.text?.clear() }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.searchSuggestions.collectLatest {
-                updateController(it)
-            }
-        }
-
-        setupSearch()
+//        // Toolbar
+//        binding.layoutToolbarSearch.apply {
+//            searchView = inputSearch
+//            imgActionPrimary.setOnClickListener {
+//                searchView.hideKeyboard()
+//                findNavController().navigateUp()
+//            }
+//            imgActionSecondary.setOnClickListener {
+//                findNavController().navigate(R.id.downloadFragment)
+//            }
+//            clearButton.apply {
+//                visibility = if (query.isBlank()) View.GONE else View.VISIBLE
+//                setOnClickListener { searchView.text?.clear() }
+//            }
+//        }
+//
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            viewModel.searchSuggestions.collectLatest {
+//                updateController(it)
+//            }
+//        }
+//
+//        setupSearch()
     }
 
     override fun onResume() {

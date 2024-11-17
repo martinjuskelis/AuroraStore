@@ -21,7 +21,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/updatesFragment">
 
     <action
         android:id="@+id/action_global_appDetailsFragment"
@@ -301,18 +301,6 @@
         <deepLink
             app:action="android.intent.action.VIEW"
             app:uri="play.google.com/store/apps/details?id={packageName}" />
-        <action
-            android:id="@+id/action_splashFragment_to_navigation_apps"
-            app:destination="@id/appsContainerFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/mobile_navigation"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_splashFragment_to_gamesContainerFragment"
-            app:destination="@id/gamesContainerFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/mobile_navigation"
-            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashFragment_to_updatesFragment"
             app:destination="@id/updatesFragment"

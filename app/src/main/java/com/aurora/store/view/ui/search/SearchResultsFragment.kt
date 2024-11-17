@@ -84,25 +84,25 @@ class SearchResultsFragment : BaseFragment<FragmentSearchResultBinding>(),
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
         // Toolbar
-        binding.layoutViewToolbar.apply {
-            searchView = inputSearch
-            imgActionPrimary.setOnClickListener {
-                findNavController().navigateUp()
-            }
-            imgActionSecondary.setOnClickListener {
-                findNavController().navigate(R.id.downloadFragment)
-            }
-            clearButton.apply {
-                visibility = if (query.isNullOrBlank()) View.GONE else View.VISIBLE
-                setOnClickListener {
-                    searchView.text?.clear()
-                    searchView.showKeyboard()
-                }
-            }
-        }
-
-        // Search
-        attachSearch()
+//        binding.layoutViewToolbar.apply {
+//            searchView = inputSearch
+//            imgActionPrimary.setOnClickListener {
+//                findNavController().navigateUp()
+//            }
+//            imgActionSecondary.setOnClickListener {
+//                findNavController().navigate(R.id.downloadFragment)
+//            }
+//            clearButton.apply {
+//                visibility = if (query.isNullOrBlank()) View.GONE else View.VISIBLE
+//                setOnClickListener {
+//                    searchView.text?.clear()
+//                    searchView.showKeyboard()
+//                }
+//            }
+//        }
+//
+//        // Search
+//        attachSearch()
 
         // RecyclerView
         val endlessRecyclerOnScrollListener = object : EndlessRecyclerOnScrollListener() {
