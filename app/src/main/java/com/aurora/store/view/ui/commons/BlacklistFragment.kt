@@ -60,26 +60,26 @@ class BlacklistFragment : BaseFragment<FragmentGenericWithSearchBinding>() {
                 findNavController().navigateUp()
             }
 
-            inputSearch.addTextChangedListener(object : TextWatcher {
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s.isNullOrEmpty()) {
-                        updateController(viewModel.packages.value)
-                    } else {
-                        val filteredPackages = viewModel.packages.value?.filter {
-                            it.applicationInfo!!.loadLabel(requireContext().packageManager).contains(s, true)
-                        }
-                        updateController(filteredPackages)
-                    }
-                }
-
-                override fun afterTextChanged(s: Editable?) {}
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {}
-            })
+//            inputSearch.addTextChangedListener(object : TextWatcher {
+//                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                    if (s.isNullOrEmpty()) {
+//                        updateController(viewModel.packages.value)
+//                    } else {
+//                        val filteredPackages = viewModel.packages.value?.filter {
+//                            it.applicationInfo!!.loadLabel(requireContext().packageManager).contains(s, true)
+//                        }
+//                        updateController(filteredPackages)
+//                    }
+//                }
+//
+//                override fun afterTextChanged(s: Editable?) {}
+//                override fun beforeTextChanged(
+//                    s: CharSequence?,
+//                    start: Int,
+//                    count: Int,
+//                    after: Int
+//                ) {}
+//            })
         }
     }
 

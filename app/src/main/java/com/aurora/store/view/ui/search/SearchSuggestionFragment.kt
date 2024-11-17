@@ -81,75 +81,75 @@ class SearchSuggestionFragment : BaseFragment<FragmentSearchSuggestionBinding>()
 
     override fun onResume() {
         super.onResume()
-        if (::searchView.isInitialized) {
-            searchView.showKeyboard()
-        }
+//        if (::searchView.isInitialized) {
+//            searchView.showKeyboard()
+//        }
     }
 
     private fun updateController(searchSuggestions: List<SearchSuggestEntry>) {
-        binding.recycler.withModels {
-            setFilterDuplicates(true)
-            searchSuggestions.forEach {
-                add(
-                    SearchSuggestionViewModel_()
-                        .id(it.title)
-                        .entry(it)
-                        .action { _ ->
-                            updateQuery(it.title)
-                        }
-                        .click { _ ->
-                            searchView.hideKeyboard()
-                            search(it.title)
-                        }
-                )
-            }
-        }
+//        binding.recycler.withModels {
+//            setFilterDuplicates(true)
+//            searchSuggestions.forEach {
+//                add(
+//                    SearchSuggestionViewModel_()
+//                        .id(it.title)
+//                        .entry(it)
+//                        .action { _ ->
+//                            updateQuery(it.title)
+//                        }
+//                        .click { _ ->
+//                            searchView.hideKeyboard()
+//                            search(it.title)
+//                        }
+//                )
+//            }
+//        }
     }
 
     private fun setupSearch() {
-        searchView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.isNotEmpty()) {
-                    query = s.toString()
-                    if (query.isNotEmpty()) {
-                        viewModel.observeStreamBundles(query)
-                    }
-                    binding.layoutToolbarSearch.clearButton.visibility = View.VISIBLE
-                } else {
-                    binding.layoutToolbarSearch.clearButton.visibility = View.GONE
-                }
-            }
-
-            override fun afterTextChanged(s: Editable) {}
-        })
-
-        searchView.setOnEditorActionListener { _: TextView?, actionId: Int, _: KeyEvent? ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH
-                || actionId == KeyEvent.ACTION_DOWN
-                || actionId == KeyEvent.KEYCODE_ENTER
-            ) {
-                query = searchView.text.toString()
-                if (query.isNotEmpty()) {
-                    searchView.hideKeyboard()
-                    search(query)
-                    return@setOnEditorActionListener true
-                }
-            }
-            false
-        }
+//        searchView.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+//
+//            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+//                if (s.isNotEmpty()) {
+//                    query = s.toString()
+//                    if (query.isNotEmpty()) {
+//                        viewModel.observeStreamBundles(query)
+//                    }
+//                    binding.layoutToolbarSearch.clearButton.visibility = View.VISIBLE
+//                } else {
+//                    binding.layoutToolbarSearch.clearButton.visibility = View.GONE
+//                }
+//            }
+//
+//            override fun afterTextChanged(s: Editable) {}
+//        })
+//
+//        searchView.setOnEditorActionListener { _: TextView?, actionId: Int, _: KeyEvent? ->
+//            if (actionId == EditorInfo.IME_ACTION_SEARCH
+//                || actionId == KeyEvent.ACTION_DOWN
+//                || actionId == KeyEvent.KEYCODE_ENTER
+//            ) {
+//                query = searchView.text.toString()
+//                if (query.isNotEmpty()) {
+//                    searchView.hideKeyboard()
+//                    search(query)
+//                    return@setOnEditorActionListener true
+//                }
+//            }
+//            false
+//        }
     }
 
     private fun updateQuery(query: String) {
-        searchView.text = Editable.Factory.getInstance().newEditable(query)
-        searchView.setSelection(query.length)
+//        searchView.text = Editable.Factory.getInstance().newEditable(query)
+//        searchView.setSelection(query.length)
     }
 
     private fun search(query: String) {
-        findNavController().navigate(
-            SearchSuggestionFragmentDirections
-                .actionSearchSuggestionFragmentToSearchResultsFragment(query)
-        )
+//        findNavController().navigate(
+//            SearchSuggestionFragmentDirections
+//                .actionSearchSuggestionFragmentToSearchResultsFragment(query)
+//        )
     }
 }

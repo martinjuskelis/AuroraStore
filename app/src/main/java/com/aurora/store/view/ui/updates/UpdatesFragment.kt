@@ -95,9 +95,9 @@ class UpdatesFragment : BaseFragment<FragmentUpdatesBinding>() {
             viewModel.fetchUpdates()
         }
 
-        binding.searchFab.setOnClickListener {
-            findNavController().navigate(R.id.searchSuggestionFragment)
-        }
+//        binding.searchFab.setOnClickListener {
+//            findNavController().navigate(R.id.searchSuggestionFragment)
+//        }
     }
 
     private fun updateController(appList: Map<Update, Download?>?) {

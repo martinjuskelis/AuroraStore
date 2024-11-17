@@ -30,19 +30,10 @@ import androidx.core.view.WindowInsetsCompat.Type.displayCutout
 import androidx.core.view.WindowInsetsCompat.Type.ime
 import androidx.core.view.WindowInsetsCompat.Type.systemBars
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.FloatingWindow
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.aurora.extensions.isNAndAbove
 import com.aurora.store.data.helper.UpdateHelper
-import com.aurora.store.data.model.NetworkStatus
 import com.aurora.store.data.receiver.MigrationReceiver
 import com.aurora.store.databinding.ActivityMainBinding
 import com.aurora.store.util.Preferences
-import com.aurora.store.util.Preferences.PREFERENCE_DEFAULT_SELECTED_TAB
-import com.aurora.store.view.ui.sheets.NetworkDialogSheet
-import com.aurora.store.data.providers.NetworkProvider
-import com.aurora.store.util.PackageUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -54,19 +45,9 @@ import kotlinx.coroutines.flow.onEach
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var networkProvider: NetworkProvider
-
-    @Inject
     lateinit var updateHelper: UpdateHelper
 
     private lateinit var B: ActivityMainBinding
-
-    // TopLevelFragments
-    private val topLevelFrags = listOf(
-        R.id.appsContainerFragment,
-        R.id.gamesContainerFragment,
-        R.id.updatesFragment
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Check and run migrations first if required
@@ -86,82 +67,11 @@ class MainActivity : AppCompatActivity() {
             windowInsets
         }
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        if (isNAndAbove && !PackageUtil.isTv(this)) {
-            networkProvider.status.onEach { networkStatus ->
-                when (networkStatus) {
-                    NetworkStatus.AVAILABLE -> {
-                        if (!supportFragmentManager.isDestroyed && isIntroDone()) {
-                            val fragment = supportFragmentManager
-                                .findFragmentByTag(NetworkDialogSheet.TAG)
-                            fragment?.let {
-                                supportFragmentManager.beginTransaction()
-                                    .remove(fragment)
-                                    .commitAllowingStateLoss()
-                            }
-                        }
-
-                    }
-
-                    NetworkStatus.UNAVAILABLE -> {
-                        if (!supportFragmentManager.isDestroyed && isIntroDone()) {
-                            supportFragmentManager.beginTransaction()
-                                .add(NetworkDialogSheet.newInstance(), NetworkDialogSheet.TAG)
-                                .commitAllowingStateLoss()
-                        }
-                    }
-                }
-            }.launchIn(AuroraApp.scope)
-        }
-
-        B.navView.setupWithNavController(navController)
-
-        // Handle quick exit from back actions
-        val defaultTab = when (Preferences.getInteger(this, PREFERENCE_DEFAULT_SELECTED_TAB)) {
-            1 -> R.id.gamesContainerFragment
-            2 -> R.id.updatesFragment
-            else -> R.id.appsContainerFragment
-        }
-        onBackPressedDispatcher.addCallback(this) {
-            if (navController.currentDestination?.id in topLevelFrags) {
-                if (navController.currentDestination?.id == defaultTab) {
-                    finish()
-                } else {
-                    navController.navigate(defaultTab)
-                }
-            } else if (navHostFragment.childFragmentManager.backStackEntryCount == 0) {
-                // We are on either on onboarding or splash fragment
-                finish()
-            } else {
-                navController.navigateUp()
-            }
-        }
-
-        // Handle views on fragments
-        navController.addOnDestinationChangedListener { _, navDestination, _ ->
-            if (navDestination !is FloatingWindow) {
-                when (navDestination.id) {
-                    in topLevelFrags -> B.navView.visibility = View.VISIBLE
-                    else -> B.navView.visibility = View.GONE
-                }
-            }
-        }
-
         // Updates
         lifecycleScope.launch {
             updateHelper.updates.collectLatest { list ->
-                B.navView.getOrCreateBadge(R.id.updatesFragment).apply {
-                    isVisible = !list.isNullOrEmpty()
-                    number = list?.size ?: 0
-                }
+                // Handle updates if necessary
             }
         }
-    }
-
-    private fun isIntroDone(): Boolean {
-        return Preferences.getBoolean(this@MainActivity, Preferences.PREFERENCE_INTRO)
     }
 }

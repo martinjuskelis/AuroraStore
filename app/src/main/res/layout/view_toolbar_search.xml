@@ -36,20 +36,20 @@
         app:srcCompat="@drawable/ic_arrow_back"
         app:tint="?colorControlNormal" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/input_search"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/clearButton"
-        android:layout_toEndOf="@id/img_action_primary"
-        android:background="@null"
-        android:hint="@string/search_hint"
-        android:imeOptions="flagNoExtractUi|actionSearch"
-        android:inputType="text"
-        android:paddingStart="@dimen/padding_large"
-        android:paddingEnd="@dimen/padding_normal"
-        android:singleLine="true" />
+<!--    <com.google.android.material.textfield.TextInputEditText-->
+<!--        android:id="@+id/input_search"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="42dp"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:layout_toStartOf="@id/clearButton"-->
+<!--        android:layout_toEndOf="@id/img_action_primary"-->
+<!--        android:background="@null"-->
+<!--        android:hint="@string/search_hint"-->
+<!--        android:imeOptions="flagNoExtractUi|actionSearch"-->
+<!--        android:inputType="text"-->
+<!--        android:paddingStart="@dimen/padding_large"-->
+<!--        android:paddingEnd="@dimen/padding_normal"-->
+<!--        android:singleLine="true" />-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/clearButton"

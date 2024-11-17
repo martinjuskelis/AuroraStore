@@ -22,25 +22,14 @@ package com.aurora.store.view.ui.search
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.aurora.extensions.hideKeyboard
-import com.aurora.extensions.showKeyboard
-import com.aurora.gplayapi.data.models.App
-import com.aurora.gplayapi.data.models.SearchBundle
 import com.aurora.store.R
-import com.aurora.store.data.model.Filter
-import com.aurora.store.data.providers.FilterProvider.Companion.PREFERENCE_FILTER
 import com.aurora.store.databinding.FragmentSearchResultBinding
 import com.aurora.store.util.Preferences
 import com.aurora.store.view.custom.recycler.EndlessRecyclerOnScrollListener
@@ -50,7 +39,9 @@ import com.aurora.store.view.epoxy.views.app.NoAppViewModel_
 import com.aurora.store.view.epoxy.views.shimmer.AppListViewShimmerModel_
 import com.aurora.store.view.ui.commons.BaseFragment
 import com.aurora.store.viewmodel.search.SearchResultViewModel
-import com.google.android.material.textfield.TextInputEditText
+import com.aurora.gplayapi.data.models.App
+import com.aurora.gplayapi.data.models.SearchBundle
+import com.aurora.store.data.model.Filter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -59,11 +50,8 @@ class SearchResultsFragment : BaseFragment<FragmentSearchResultBinding>(),
 
     private val viewModel: SearchResultViewModel by viewModels()
 
-    private lateinit var searchView: TextInputEditText
-
     private lateinit var sharedPreferences: SharedPreferences
 
-    private var query: String? = null
     private var searchBundle: SearchBundle = SearchBundle()
 
     private var shimmerAnimationVisible = false
@@ -82,59 +70,6 @@ class SearchResultsFragment : BaseFragment<FragmentSearchResultBinding>(),
 
         sharedPreferences = Preferences.getPrefs(view.context)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-
-        // Toolbar
-//        binding.layoutViewToolbar.apply {
-//            searchView = inputSearch
-//            imgActionPrimary.setOnClickListener {
-//                findNavController().navigateUp()
-//            }
-//            imgActionSecondary.setOnClickListener {
-//                findNavController().navigate(R.id.downloadFragment)
-//            }
-//            clearButton.apply {
-//                visibility = if (query.isNullOrBlank()) View.GONE else View.VISIBLE
-//                setOnClickListener {
-//                    searchView.text?.clear()
-//                    searchView.showKeyboard()
-//                }
-//            }
-//        }
-//
-//        // Search
-//        attachSearch()
-
-        // RecyclerView
-        val endlessRecyclerOnScrollListener = object : EndlessRecyclerOnScrollListener() {
-            override fun onLoadMore(currentPage: Int) {
-                viewModel.next(searchBundle.subBundles)
-            }
-        }
-        binding.recycler.addOnScrollListener(endlessRecyclerOnScrollListener)
-
-        // Filter
-        binding.filterFab.setOnClickListener {
-            findNavController().navigate(R.id.filterSheet)
-        }
-
-        viewModel.liveData.observe(viewLifecycleOwner) {
-            if (shimmerAnimationVisible) {
-                endlessRecyclerOnScrollListener.resetPageCount()
-                binding.recycler.clear()
-                shimmerAnimationVisible = false
-            }
-            searchBundle = it
-            updateController(searchBundle)
-        }
-
-        query = requireArguments().getString("query")
-
-        // Don't fetch search results again when coming back to fragment
-        if (searchBundle.appList.isEmpty()) {
-            query?.let { updateQuery(it) }
-        } else {
-            updateController(searchBundle)
-        }
     }
 
     override fun onDestroyView() {
@@ -148,137 +83,26 @@ class SearchResultsFragment : BaseFragment<FragmentSearchResultBinding>(),
     }
 
     private fun updateController(searchBundle: SearchBundle?) {
-        if (searchBundle == null) {
-            shimmerAnimationVisible = true
-            binding.recycler.withModels {
-                for (i in 1..10) {
-                    add(AppListViewShimmerModel_().id(i))
-                }
-            }
-            return
-        }
-
-        val filteredAppList = filter(searchBundle.appList)
-
-        if (filteredAppList.isEmpty()) {
-            if (searchBundle.subBundles.isNotEmpty()) {
-                viewModel.next(searchBundle.subBundles)
-                binding.recycler.withModels {
-                    setFilterDuplicates(true)
-                    add(
-                        AppProgressViewModel_()
-                            .id("progress")
-                    )
-                }
-            } else {
-                binding.recycler.adapter?.let {
-                    /*Show empty search list if nothing found or no app matches filter criterion*/
-                    if (it.itemCount == 1 && searchBundle.subBundles.isEmpty()) {
-                        binding.recycler.withModels {
-                            add(
-                                NoAppViewModel_()
-                                    .id("no_app")
-                                    .message(getString(R.string.details_no_app_match))
-                                    .icon(R.drawable.ic_round_search)
-                            )
-                        }
-                    }
-                }
-            }
-        } else {
-            binding.recycler
-                .withModels {
-                    setFilterDuplicates(true)
-
-                    filteredAppList.forEach { app ->
-                        add(
-                            AppListViewModel_()
-                                .id(app.id)
-                                .app(app)
-                                .click(View.OnClickListener {
-                                    searchView.hideKeyboard()
-                                    openDetailsFragment(app.packageName, app)
-                                })
-                        )
-                    }
-
-                    if (searchBundle.subBundles.isNotEmpty()) {
-                        add(
-                            AppProgressViewModel_()
-                                .id("progress")
-                        )
-                    }
-                }
-
-            binding.recycler.adapter?.let {
-                if (it.itemCount < 10) {
-                    viewModel.next(searchBundle.subBundles)
-                }
-            }
-        }
+        // Do nothing
     }
 
     private fun attachSearch() {
-        searchView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.isNotEmpty()) {
-                    binding.layoutViewToolbar.clearButton.visibility = View.VISIBLE
-                } else {
-                    binding.layoutViewToolbar.clearButton.visibility = View.GONE
-                }
-            }
-
-            override fun afterTextChanged(s: Editable) {}
-        })
-
-        searchView.setOnEditorActionListener { _: TextView?, actionId: Int, _: KeyEvent? ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH
-                || actionId == KeyEvent.ACTION_DOWN
-                || actionId == KeyEvent.KEYCODE_ENTER
-            ) {
-                query = searchView.text.toString()
-                query?.let {
-                    requireArguments().putString("query", it)
-                    queryViewModel(it)
-                    return@setOnEditorActionListener true
-                }
-            }
-            false
-        }
+        // Do nothing
     }
 
     private fun updateQuery(query: String) {
-        searchView.text = Editable.Factory.getInstance().newEditable(query)
-        searchView.setSelection(query.length)
-        queryViewModel(query)
+        // Do nothing
     }
 
     private fun queryViewModel(query: String) {
-        updateController(null)
-        viewModel.observeSearchResults(query)
+        // Do nothing
     }
 
     private fun filter(appList: List<App>): List<App> {
-        val filter = viewModel.filterProvider.getSavedFilter()
-        return appList
-            .asSequence()
-            .filter { app ->
-                app.displayName.isNotEmpty() &&
-                        (filter.paidApps || app.isFree) &&
-                        (filter.appsWithAds || !app.containsAds) &&
-                        (filter.gsfDependentApps || app.dependencies.dependentPackages.isEmpty()) &&
-                        (filter.rating <= 0 || app.rating.average >= filter.rating) &&
-                        (filter.downloads <= 0 || app.installs >= filter.downloads)
-            }
-            .toList()
+        return emptyList()
     }
 
-
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == PREFERENCE_FILTER) query?.let { queryViewModel(it) }
+        // Do nothing
     }
 }

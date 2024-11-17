@@ -50,23 +50,23 @@ class AppsContainerFragment : BaseFragment<FragmentAppsGamesBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         // Toolbar
-        binding.toolbar.apply {
-            title = getString(R.string.title_apps)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.menu_download_manager -> {
-                        findNavController().navigate(R.id.downloadFragment)
-                    }
-
-                    R.id.menu_more -> {
-                        findNavController().navigate(
-                            MobileNavigationDirections.actionGlobalMoreDialogFragment()
-                        )
-                    }
-                }
-                true
-            }
-        }
+//        binding.toolbar.apply {
+//            title = getString(R.string.title_apps)
+//            setOnMenuItemClickListener {
+//                when (it.itemId) {
+//                    R.id.menu_download_manager -> {
+//                        findNavController().navigate(R.id.downloadFragment)
+//                    }
+//
+//                    R.id.menu_more -> {
+//                        findNavController().navigate(
+//                            MobileNavigationDirections.actionGlobalMoreDialogFragment()
+//                        )
+//                    }
+//                }
+//                true
+//            }
+//        }
 
         // ViewPager
         val isForYouEnabled = Preferences.getBoolean(
