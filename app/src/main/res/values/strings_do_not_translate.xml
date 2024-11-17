@@ -18,7 +18,7 @@
   -->
 
 <resources>
-    <string name="app_name">"Aurora Store"</string>
+    <string name="app_name">"Aurora Updater"</string>
 
     <string name="app_list_rating">"%1$s • %2$s★ • %3$s"</string>
     <string name="app_view_rating">"%1$s • %2$s★"</string>
